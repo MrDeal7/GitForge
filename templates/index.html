@@ -28,9 +28,30 @@
     <!-- Projects section -->
     <section>
       <h2 class="text-2xl font-semibold mb-4">Projects</h2>
+
+      <div class="flex flex-wrap gap-2 mb-6" id="language-filters">
+        <button
+          class="language-btn px-3 py-1 rounded-full text-sm border border-slate-700 bg-slate-800 text-slate-200"
+          data-language="All"
+        >
+          All
+        </button>
+        {% for language in languages %}
+        <button
+          class="language-btn px-3 py-1 rounded-full text-sm border border-slate-700 bg-slate-900 text-slate-300 hover:text-white"
+          data-language="{{ language }}"
+        >
+          {{ language }}
+        </button>
+        {% endfor %}
+      </div>
+
       <div class="grid gap-4 md:grid-cols-2">
         {% for repo in repos %}
-        <article class="bg-slate-900/60 border border-slate-800 rounded-lg p-4 flex flex-col">
+        <article
+          class="project-card bg-slate-900/60 border border-slate-800 rounded-lg p-4 flex flex-col"
+          data-language="{{ repo.filter_language or '' }}"
+        >
           <h3 class="text-lg font-semibold text-sky-400 mb-1">
             <a href="{{ repo.html_url }}" target="_blank" class="hover:underline">
               {{ repo.name }}
@@ -40,7 +61,7 @@
             {{ repo.description or 'No description provided.' }}
           </p>
           <div class="mt-auto flex justify-between items-center text-xs text-slate-500">
-            <span>{{ repo.language or 'Mixed' }}</span>
+            <span>{{ repo.language or 'No primary language' }}</span>
             <span>⭐ {{ repo.stargazers_count }}</span>
           </div>
         </article>
@@ -48,5 +69,38 @@
       </div>
     </section>
   </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.language-btn');
+    const cards = document.querySelectorAll('.project-card');
+
+    function setActiveButton(activeButton) {
+      buttons.forEach((btn) => {
+        btn.classList.remove('bg-sky-700', 'text-white', 'border-sky-600');
+        if (btn.dataset.language === 'All') {
+          btn.classList.add('bg-slate-800', 'text-slate-200', 'border-slate-700');
+        } else {
+          btn.classList.add('bg-slate-900', 'text-slate-300', 'border-slate-700');
+        }
+      });
+
+      activeButton.classList.remove('bg-slate-800', 'bg-slate-900', 'text-slate-200', 'text-slate-300', 'border-slate-700');
+      activeButton.classList.add('bg-sky-700', 'text-white', 'border-sky-600');
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selectedLanguage = button.dataset.language;
+
+        cards.forEach((card) => {
+          const cardLanguage = card.dataset.language;
+          const shouldShow = selectedLanguage === 'All' || cardLanguage === selectedLanguage;
+          card.style.display = shouldShow ? '' : 'none';
+        });
+
+        setActiveButton(button);
+      });
+    });
+  </script>
 </body>
 </html>
