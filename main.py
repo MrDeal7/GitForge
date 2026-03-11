@@ -1,10 +1,13 @@
-age = int(input("Enter ur age\n"))
+from flask import Flask, render_template
+import json
 
-def main():
-    print("learning")
-    print(age)
-    
-main()
+app = Flask(__name__)
+@app.route("/")
 
+def home():
+	with open("config.json", "r") as f:
+		config = json.load(f)
+	return render_template("index.html", config=config)
+	
 if __name__ == "__main__":
-    main()
+	app.run(debug=True)
