@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ config.name }} – Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <!-- Header -->
+    <header class="mb-10">
+      <p class="text-sm text-slate-400">Software Developer</p>
+      <h1 class="text-4xl font-bold mt-1">{{ config.name }}</h1>
+      <p class="text-slate-400 mt-3 max-w-xl">
+        {{ config.bio }}
+      </p>
+      <div class="mt-4 flex gap-4 text-sm text-slate-400">
+        <a href="https://github.com/{{ config.github_username }}" class="hover:text-white">
+          GitHub
+        </a>
+        <a href="mailto:{{ config.email }}" class="hover:text-white">
+          Email
+        </a>
+      </div>
+    </header>
+
+    <!-- Projects section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Projects</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {% for repo in repos %}
+        <article class="bg-slate-900/60 border border-slate-800 rounded-lg p-4 flex flex-col">
+          <h3 class="text-lg font-semibold text-sky-400 mb-1">
+            <a href="{{ repo.html_url }}" target="_blank" class="hover:underline">
+              {{ repo.name }}
+            </a>
+          </h3>
+          <p class="text-sm text-slate-400 mb-3">
+            {{ repo.description or 'No description provided.' }}
+          </p>
+          <div class="mt-auto flex justify-between items-center text-xs text-slate-500">
+            <span>{{ repo.language or 'Mixed' }}</span>
+            <span>⭐ {{ repo.stargazers_count }}</span>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</body>
+</html>
