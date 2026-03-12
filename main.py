@@ -14,6 +14,7 @@ def main():
 	webLanguages = {"JavaScript", "TypeScript", None}
 	for repo in allRepos:
 		language = repo.get("language")
+		if language == "HTML" : language = "Python" #added due to the fact that python web apps can be really low on python code
 		repo["filter_language"] = "Fullstack Web Page" if language in webLanguages else language
 
 	reposWithDescription = [r for r in allRepos if r.get("description")]
